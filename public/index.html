@@ -1,0 +1,48 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    async function searchBarcode() {
+      const barcode = document.getElementById('barcode').value;
+      const data = {
+        barcode
+      };
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      }
+      const response = await fetch('/search', options);
+      const prices = await response.json();
+      for (result of prices.prices) {
+        createP(result.name, result.price)
+      }
+    }
+
+    function createP(name, price) {
+      let para = document.createElement("p");
+      let node = document.createTextNode(`${name}: ${price}`);
+      para.appendChild(node);
+
+      let element = document.getElementById("results");
+      element.appendChild(para);
+    }
+  </script>
+  <h1>Τιμές Ανταγωνισμού</h1>
+  <span>Barcode:</span>
+  <input id='barcode' type="text" placeholder="Barcode">
+  <button onclick="searchBarcode()">Αναζήτηση</button>
+  <br>
+  <br>
+  <div id='results'></div>
+</body>
+
+</html>
